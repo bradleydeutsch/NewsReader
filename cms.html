@@ -1,18 +1,18 @@
 <!doctype html>
 <html>
-	<head>
-		<title>News Reader</title>
-	</head>
-	<body>
-		<form>
+    <head>
+        <title>News Reader</title>
+    </head>
+    <body>
+        <form>
             <input type="text" name="id" id="id" placeholder="Id..." />
             <input type="text" name="title" id="title" placeholder="Title..." />
             <input type="text" name="description" id="description" placeholder="Description..." />
             <label>Direct <input type="checkbox" name="direct" id="direct" value="1" /></label>
             <input type="submit" value="Add Article" />
-		</form>
+        </form>
 
-		<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+        <script src="http://localhost:8000/socket.io/socket.io.js"></script>
 
         <script type="text/javascript" src="prop.js"></script>
 
@@ -40,5 +40,5 @@
                 });
             })
         </script>
-	</body>
+    </body>
 </html>
