@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<title>News Reader</title>
+	</head>
+	<body>
+		<form>
+            <input type="text" name="id" id="id" placeholder="Id..." />
+            <input type="text" name="title" id="title" placeholder="Title..." />
+            <input type="text" name="description" id="description" placeholder="Description..." />
+            <label>Direct <input type="checkbox" name="direct" id="direct" value="1" /></label>
+            <input type="submit" value="Add Article" />
+		</form>
+
+		<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+
+        <script type="text/javascript" src="prop.js"></script>
+
+        <script type="text/javascript" src="assets/js/lib/jquery-2.0.3.min.js"></script>
+
+        <script type="text/javascript" src="assets/js/common/config.js"></script>
+
+        <script type="text/javascript">
+            socket = io.connect(nh.config.NODE.URL, {
+                port: nh.config.NODE.PORT,
+                transports: ['websocket']
+            });
+
+            $('form').bind('submit', function (evt) {
+                var _this = $(this),
+                    nodeEvent = _this.find('#direct').is(':checked')
+                            ? nh.config.NODE.EVENTS.PUSH_ARTICLE : nh.config.NODE.EVENTS.ADD_ARTICLE;
+
+                evt.preventDefault();
+
+                socket.emit(nodeEvent, {
+                    "id": _this.find('#id').val(),
+                    "title": _this.find('#title').val(),
+                    "description": _this.find('#description').val()
+                });
+            })
+        </script>
+	</body>
+</html>
