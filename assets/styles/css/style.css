@@ -1,0 +1,120 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+html {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+q, blockquote {
+  quotes: none;
+}
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+a img {
+  border: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+body {
+  font-size: 100%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.6em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+
+#wrapper {
+  width: 60%;
+  margin: 0 auto;
+}
+#wrapper > header, #wrapper > footer {
+  padding: 20px;
+  text-align: center;
+}
+
+#mainContent article, #mainContent aside {
+  float: left;
+  box-sizing: border-box;
+  padding: 10px;
+}
+#mainContent article {
+  width: 60%;
+}
+#mainContent aside {
+  width: 40%;
+}
+
+@media (max-width: 900px) {
+  #mainContent article, #mainContent aside {
+    width: 100%;
+  }
+}
+.articleListing {
+  box-sizing: border-box;
+  border: 1px solid darkgrey;
+  padding: 10px;
+}
+.articleListing li {
+  -webkit-transition: all, 2s, ease-in-out;
+  -moz-transition: all, 2s, ease-in-out;
+  -o-transition: all, 2s, ease-in-out;
+  transition: all, 2s, ease-in-out;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-left: 3px solid lightgrey;
+  opacity: 1;
+}
+.articleListing li.new {
+  opacity: 0;
+}

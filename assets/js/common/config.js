@@ -12,6 +12,7 @@
             NODE: {
                 URL: 'http://localhost',
                 PORT: 8000,
+                TRANSPORTS: ['websocket'],
                 EVENTS: {
                     ADD_ARTICLE: 'add article',
                     PUSH_ARTICLE: 'push article',

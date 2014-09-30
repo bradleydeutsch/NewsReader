@@ -1,0 +1,19 @@
+{
+  "name": "NewsReader",
+  "version": "0.1.0",
+  "description": "Base application for reading news",
+  "main": "App.js",
+  "dependencies": {
+    "socket.io": "^0.9.16"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-compass": "^0.9.0",
+    "grunt-contrib-concat": "^0.4.0",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-uglify": "^0.5.0",
+    "grunt-react": "^0.9.0"
+  },
+  "author": "BD",
+  "license": "ISC"
+}

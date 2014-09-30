@@ -1,0 +1,53 @@
+@import compass/utilities
+@import compass/css3
+@import compass/css3/images
+
++global-reset
+
+body
+	font-size: 100%
+
+ul
+	list-style-type: none
+
+h1
+	font-size: 2em
+h2
+	font-size: 1.6em
+h3
+	font-size: 1.3em
+
+#wrapper
+	width: 60%
+	margin: 0 auto
+	> header, > footer
+		padding: 20px
+		text-align: center
+
+#mainContent
+	article, aside
+		float: left
+		box-sizing: border-box
+		padding: 10px
+	article
+		width: 60%
+	aside
+		width: 40%
+
+@media (max-width: 900px)
+	#mainContent
+		article, aside
+			width: 100%
+
+.articleListing
+	box-sizing: border-box
+	border: 1px solid darkgray
+	padding: 10px
+	li
+		+transition(all, 2s, ease-in-out)
+		padding: 10px
+		margin-bottom: 5px
+		border-left: 3px solid lightgrey
+		opacity: 1
+		&.new
+			opacity: 0

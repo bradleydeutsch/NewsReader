@@ -2,30 +2,79 @@
 <html>
     <head>
         <title>News Reader</title>
+
+        <link type="text/css" href="assets/styles/css/style.css" rel="stylesheet" />
     </head>
     <body>
-        <div id="articleContainer">
+        <div id="wrapper">
+            <header>
+                <h1>NakedHearts</h1>
+            </header>
+            <section id="mainContent">
+                <article>
+                    <header>
+                        <h1>Some Selected Article</h1>
+                    </header>
+                    <div id="articleContent">
+                        <p>Lorem ipsum dolor sit amet, abhorreant mediocritatem necessitatibus an has, labores ceteros mel ei. An cum exerci doming. Ex periculis consulatu eum, ex percipit vivendum erroribus mea. Id vel quidam accusata temporibus, ne zril aperiam suscipit pro. In nam wisi oblique intellegat, mea no brute quaerendum, eu sea offendit copiosae. Vitae graeci legendos sed in, sed id nisl probo adipisci, ne magna regione vis.</p>
+                        <p>Quas labores eos ad. Ne eos enim quaeque philosophia, praesent scripserit efficiantur sed at. Cu sea magna vivendo, ea aliquam assentior nam. Id offendit instructior per. Te fugit blandit duo.</p>
+                    </div>
+                    <footer>
+                        <a href="#">Share This</a>
+                    </footer>
+                </article>
+                <aside>
+                    <div id="articleContainer">
+                        <ul class="articleListing">
+                            <li data-article-id="1">
+                                <a href="#link-for-1">
+                                    <h3>Naked Hearts gets started</h3>
+                                    <div>
+                                        <p>Quas labores eos ad. Ne eos enim quaeque philosophia, praesent scripserit efficiantur sed at. Cu sea magna vivendo, ea aliquam assentior nam. Id offendit instructior per. Te fugit blandit duo.</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li data-article-id="2">
+                                <a href="#link-for-2">
+                                    <h3>Naked hearts employs developer</h3>
+                                    <div>
+                                        <p>Quas labores eos ad. Ne eos enim quaeque philosophia, praesent scripserit efficiantur sed at.</p><p>Cu sea magna vivendo, ea aliquam assentior nam. Id offendit instructior per. Te fugit blandit duo.</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </section>
+            <footer>
+                <p&copy; Copyright Booya.com</p>
+            </footer>
         </div>
 
         <script src="http://localhost:8000/socket.io/socket.io.js"></script>
+        <script src="http://fb.me/react-0.11.2.js"></script>
+
+        <script type="text/javascript" src="assets/js/compiled/NewsReader.js.min.js"></script>
+
+        <!-- Dev Mode
+        <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
+
+        <script type="text/javascript" src="assets/js/lib/jquery-2.0.3.min.js"></script>
 
         <script type="text/javascript" src="prop.js"></script>
 
-        <script type="text/javascript" src="assets/js/lib/jquery-2.0.3.min.js"></script>
-        <script src="http://fb.me/react-0.11.2.js"></script>
-        <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
-
         <script type="text/javascript" src="assets/js/common/config.js"></script>
 
-        <script type="text/jsx" src="assets/js/views/templates.js"></script>
-        <script type="text/jsx" src="assets/js/lib/Utils.js"></script>
+        <script type="text/jsx" src="assets/js/views/templates.jsx"></script>
+        <script type="text/jsx" src="assets/js/lib/Utils.jsx"></script>
 
 
-        <script type="text/jsx" src="assets/js/views/news-poll-view.js"></script>
-        <script type="text/jsx" src="assets/js/app/news-poll-application.js"></script>
-        <script type="text/jsx" src="assets/js/page/news-poll-page.js"></script>
+        <script type="text/jsx" src="assets/js/views/news-poll-view.jsx"></script>
+        <script type="text/jsx" src="assets/js/app/news-poll-application.jsx"></script>
+        <script type="text/jsx" src="assets/js/page/news-poll-page.jsx"></script>
 
 
         <script type="text/jsx" src="assets/js/boot.js"></script>
+        -->
     </body>
 </html>
