@@ -52,17 +52,9 @@ nh.PROPS = {
         exports(context);
     }
 })(typeof module === 'undefined' ? nh : module);
-;(function (templates) {
-    templates.PageLoader = React.createClass({displayName: 'PageLoader',
-        render: function () {
-            return (
-                React.DOM.div({id: "pageLoader"}, 
-                    React.DOM.h1(null, "Please wait...")
-                )
-            );
-        }
-    })
-})(nh.templates);;(function (utils) {
+;(function (utils) {
+    var cid = 0;
+
     utils.types = {
         ARRAY: '[object Array]',
         FUNCTION: '[object Function]',
@@ -90,7 +82,95 @@ nh.PROPS = {
     utils.removePageLoader = function () {
         $('body #pageLoader').remove();
     };
+
+    utils.uniqueId = function () {
+        return ++cid;
+    };
+
+    utils.extend = function (ret) {
+        var deep = (utils.typeCompare(arguments[arguments.length - 1], utils.types.BOOLEAN)
+                && arguments[arguments.length - 1]) || false,
+            obj, i;
+
+        ret = ret || {};
+
+        for (i = 1; i < arguments.length; i++) {
+            obj = arguments[i];
+
+            if (!obj) {
+                continue;
+            }
+
+            utils.forEachKey(obj, function (key) {
+                if ((deep) && (typeof this[key] === 'object')) {
+                    ret[key] = ret[key] || {};
+                    utils.extend(ret[key], this[key], true);
+                } else {
+                    ret[key] = this[key];
+                }
+            });
+        }
+
+        return ret;
+    };
+
+    utils.objExtend = function (props, staticProps) {
+        var _this = this,
+            childInstance, Surrogate;
+
+        if (props && props.hasOwnProperty('constructor')) {
+            childInstance = props.constructor;
+        } else {
+            childInstance = function () {
+                return _this.apply(this, arguments);
+            };
+        }
+
+        utils.extend(childInstance, _this, staticProps);
+
+        Surrogate = function () {
+            this.constructor = childInstance;
+        };
+        Surrogate.prototype = _this.prototype;
+        childInstance.prototype = new Surrogate;
+
+        if (props) {
+            utils.extend(childInstance.prototype, props);
+        }
+
+        childInstance.__super__ = _this.prototype;
+
+        return childInstance;
+    };
+
+    utils.forEachKey = function (obj, fnc) {
+        var key;
+
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                fnc.call(obj, key);
+            }
+        }
+    };
 }(nh.utils));;(function (nh) {
+    nh.SuperObject = function () {};
+
+    nh.SuperObject.prototype.init = function () {
+        this.cid = nh.utils.uniqueId();
+    };
+
+    nh.SuperObject.extend = nh.utils.objExtend;
+})(nh);;(function (templates) {
+    templates.PageLoader = React.createClass({displayName: 'PageLoader',
+        render: function () {
+            return (
+                React.DOM.div({id: "pageLoader"}, 
+                    React.DOM.h1(null, "Please wait...")
+                )
+            );
+        }
+    })
+})(nh.templates);;(function (nh) {
     nh.views.Article = React.createClass({displayName: 'Article',
         getInitialState: function() {
             return {
@@ -172,81 +252,83 @@ nh.PROPS = {
         }
     });
 })(nh);;(function (nh, $) {
-    nh.applications.NewsPoll = function () {
-        this.ARTICLE_LIMIT = 10;
+    nh.applications.AbstractApp = nh.SuperObject.extend({
+        constructor: function () {
+            this.init();
+        }
+    });
 
-        this.$el = $(document.getElementById('articleContainer'));
+    nh.applications.NewsPoll = nh.applications.AbstractApp.extend({
+        ARTICLE_LIMIT: 10,
 
-        this.init = function () {
+        init: function () {
             var _this = this;
+
+            nh.applications.NewsPoll.__super__.init.apply(_this, arguments);
 
             _this.socket = io.connect(nh.config.NODE.URL, {
                 port: nh.config.NODE.PORT,
                 transports: nh.config.NODE.TRANSPORTS
             });
 
-            /*  Will load initial data set from the page
-
-            nh.utils.addPageLoader();
-
-            $.ajax({
-                dataType: 'json',
-                url: nh.config.URLS.ARTICLES,
-                cache: true,
-                success: function (articles) {
-                    _this.el = React.renderComponent(<nh.views.ArticleList articles={ articles } />, _this.$el);
-
-                    _this.bindEvents();
-
-                    nh.utils.removePageLoader();
-                }
-            });*/
-
+            _this.$el = $(document.getElementById('articlesContainer'));
             _this.el = React.renderComponent(
-                nh.views.ArticleList({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
-                _this.$el[0]);
+                nh.views.ArticleList({articles:  _this.extractArticles(_this.$el), 
+                        limit:  _this.ARTICLE_LIMIT}),
+                _this.$el[0]
+            );
 
             _this.bindEvents();
 
             return _this;
-        };
+        },
 
-        this.extractArticles = function (el) {
+        extractArticles: function (el) {
             var articles = [];
 
             el.find('li').each(function () {
                 articles.push({
                     id: $(this).data('article-id'),
-                    title: $(this).find('h3').text(),
-                    description: $(this).find('div').html(),
+                    title: $(this).find('h3').text().trim(),
+                    description: $(this).find('div').html().trim(),
                     isNew: false
                 });
             });
 
             return articles;
-        };
+        },
 
-        this.bindEvents = function () {
+        bindEvents: function () {
             this.socket.on(nh.config.NODE.EVENTS.ARTICLE_ADDED, this.addArticle.bind(this));
             this.socket.on(nh.config.NODE.EVENTS.ARTICLES_ADDED, this.addArticles.bind(this));
-        };
+        },
 
-        this.addArticle = function (data) {
+        addArticle: function (data) {
             console.log(data);
 
             this.el.addArticle(data);
-        };
+        },
 
-        this.addArticles = function (data) {
+        addArticles: function (data) {
             console.log(data);
 
             this.el.addArticles(data);
-        };
+        }
+    });
+})(nh, $);;(function (nh) {
+    nh.pages.AbstractPage = nh.SuperObject.extend({
+        constructor: function () {
+            this.init();
+        }
+    });
 
-        return this.init();
-    }
-})(nh, $);;(function (nh, $) {
-    nh.pages.PageController = function () {
-        this.newspoll = new nh.applications.NewsPoll();
-    };
-})(nh, $);;nh.pages.currentPage = new nh.pages.PageController();
+    nh.pages.PageController = nh.pages.AbstractPage.extend({
+        init: function () {
+            var _this = this;
+
+            nh.pages.PageController.__super__.init.apply(this, arguments);
+
+            this.newsPoll = new nh.applications.NewsPoll();
+        }
+    });
+})(nh);;nh.pages.currentPage = new nh.pages.PageController();
