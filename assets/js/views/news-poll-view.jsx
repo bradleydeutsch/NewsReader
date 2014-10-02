@@ -9,13 +9,15 @@
         },
 
         componentDidMount: function () {
-            setTimeout((function (el) {
-                return function () {
-                    el.setState({
-                        isNew: false
-                    });
-                }
-            })(this), 100)
+            if (this.state.isNew) {
+                setTimeout((function (el) {
+                    return function () {
+                        el.setState({
+                            isNew: false
+                        });
+                    }
+                })(this), 100);
+            }
         },
 
         youClickedOnMe: function (evt) {

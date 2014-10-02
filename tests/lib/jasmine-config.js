@@ -1,0 +1,1 @@
+jasmine.getFixtures().fixturesPath = nh.PROPS.BASE_AJAX_URL + 'tests/fixtures';

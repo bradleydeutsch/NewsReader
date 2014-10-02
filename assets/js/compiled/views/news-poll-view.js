@@ -9,18 +9,20 @@
         },
 
         componentDidMount: function () {
-            setTimeout((function (el) {
-                return function () {
-                    el.setState({
-                        isNew: false
-                    });
-                }
-            })(this), 100)
+            if (this.state.isNew) {
+                setTimeout((function (el) {
+                    return function () {
+                        el.setState({
+                            isNew: false
+                        });
+                    }
+                })(this), 100);
+            }
         },
 
         youClickedOnMe: function (evt) {
             evt.preventDefault();
-
+console.log("IM HERE!!!");
             alert('Heyyyy, you clicked on "' + this.props.title + '", good for you!');
         },
 

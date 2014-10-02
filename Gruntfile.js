@@ -1,6 +1,20 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        react: {
+            files: {
+                expand: true,
+                cwd: 'assets/js',
+                src: ['**/*.jsx'],
+                dest: 'assets/js/compiled',
+                ext: '.js'
+            }
+        },
+        karma: {
+            unit: {
+                configFile: 'my.conf.js'
+            }
+        },
         compass: {
             dist: {
                 options: {
@@ -12,15 +26,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        react: {
-            files: {
-                expand: true,
-                cwd: 'assets/js',
-                src: ['**/*.jsx'],
-                dest: 'assets/js/compiled',
-                ext: '.js'
-            }
-        },
         concat: {
             options: {
                 separator: ';',
@@ -28,6 +33,8 @@ module.exports = function(grunt) {
             },
             build: {
                 src: [
+                    'assets/js/lib/react-0.11.2.js',
+                    'assets/js/lib/JSXTransformer-0.11.2.js',
                     'assets/js/lib/jquery-2.0.3.min.js',
                     'prop.js',
                     'assets/js/common/config.js',
@@ -62,11 +69,13 @@ module.exports = function(grunt) {
         }
     });
 
+    //grunt.loadNpmTasks('karma-browserify');
+    grunt.loadNpmTasks('grunt-react');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['compass', 'react', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['react', 'karma', 'compass', 'concat', 'uglify', 'cssmin']);
 };
