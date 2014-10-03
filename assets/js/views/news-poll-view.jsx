@@ -20,16 +20,16 @@
             }
         },
 
-        youClickedOnMe: function (evt) {
+        selectArticle: function (evt) {
             evt.preventDefault();
 
-            alert('Heyyyy, you clicked on "' + this.props.title + '", good for you!');
+            nh.eventHandler.publish(null, nh.eventHandler.events.ARTICLE_SELECTED, this);
         },
 
         render: function () {
             return (
                 <li data-article-id={ this.props.id } className={ this.state.isNew ? 'new' : '' }>
-                    <a href={ '#link-for-' + this.props.id } onClick={ this.youClickedOnMe }>
+                    <a href={ '#link-for-' + this.props.id } onClick={ this.selectArticle }>
                         <h3>{ this.props.title }</h3>
                         <div dangerouslySetInnerHTML={{ __html: this.props.description }} />
                     </a>
@@ -69,9 +69,11 @@
         },
 
         buildArticleListings: function () {
+            var _this = this;
+
             return this.state.articles.map(function (article) {
                 return <nh.views.Article key={ article.id } id={ article.id } title={ article.title }
-                    description={ article.description } isNew={ article.isNew } />;
+                    description={ article.description } isNew={ article.isNew } parent={ _this } />;
             });
         },
 
@@ -80,6 +82,22 @@
                 <ul className="articleListing">
                     { this.buildArticleListings() }
                 </ul>
+            );
+        }
+    });
+
+    nh.views.FullArticle = React.createClass({
+        render: function () {
+            return (
+                <article data-article-id={ this.props.id }>
+                    <header>
+                        <h1>{ this.props.title }</h1>
+                    </header>
+                    <div className="articleContent" dangerouslySetInnerHTML={{ __html: this.props.description }} />
+                    <footer>
+                        <a href="#">Share This</a>
+                    </footer>
+                </article>
             );
         }
     });

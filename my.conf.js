@@ -24,6 +24,7 @@ module.exports = function(config) {
 
             'assets/js/common/config.js',
             'assets/js/lib/utils.jsx',
+            'assets/js/lib/event-listener.js',
             'assets/js/abstract.jsx',
             'assets/js/views/templates.jsx',
 

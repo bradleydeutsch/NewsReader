@@ -20,10 +20,9 @@
                 transports: nh.config.NODE.TRANSPORTS
             });
 
-            _this.$el = $(document.getElementById('articlesContainer'));
+            _this.$el = $('#articlesContainer');
             _this.el = React.renderComponent(
-                <nh.views.ArticleList articles={ _this.extractArticles(_this.$el) }
-                        limit={ _this.ARTICLE_LIMIT } />,
+                <nh.views.ArticleList articles={ _this.extractArticles(_this.$el) } limit={ _this.ARTICLE_LIMIT } />,
                 _this.$el[0]
             );
 
@@ -62,6 +61,36 @@
             console.log(data);
 
             this.el.addArticles(data);
+        }
+    });
+
+    nh.applications.NewsArticle = nh.applications.AbstractApp.extend({
+        ARTICLE_LIMIT: 10,
+
+        init: function () {
+            var _this = this;
+
+            nh.applications.NewsArticle.__super__.init.apply(_this, arguments);
+
+            _this.$el = $('#articleContainer');
+            _this.render(_this.extractArticle(_this.$el));
+
+            return _this;
+        },
+
+        extractArticle: function (el) {
+            return {
+                id: el.find('article').data('article-id'),
+                title: el.find('h1').text().trim(),
+                description: el.find('.articleContent').html().trim()
+            };
+        },
+
+        render: function (article) {
+            this.el = React.renderComponent(
+                <nh.views.FullArticle id={ article.id } title={ article.title } description={ article.description } />,
+                this.$el[0]
+            );
         }
     });
 })(nh, $);

@@ -11,9 +11,19 @@
         init: function () {
             var _this = this;
 
-            nh.pages.PageController.__super__.init.apply(this, arguments);
+            nh.pages.PageController.__super__.init.apply(_this, arguments);
 
-            this.newsPoll = new nh.applications.NewsPoll();
+            _this.newsArticle = new nh.applications.NewsArticle();
+            _this.newsPoll = new nh.applications.NewsPoll();
+
+            nh.eventHandler.subscribe(null, nh.eventHandler.events.ARTICLE_SELECTED,
+                _this.handleArticleSelected.bind(_this));
+
+            return _this;
+        },
+
+        handleArticleSelected: function (event, data) {
+            this.newsArticle.render(data.props);
         }
     });
 })(nh);

@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-describe('A news article view', function () {
+describe('A news article list view', function () {
     var $el, view;
 
     beforeEach(function () {
@@ -51,7 +51,7 @@ describe('A news article view', function () {
 
     it('will call a custom function when it\'s link is clicked on', function () {
         // Before
-        jasmineReact.spyOnClass(nh.views.Article, 'youClickedOnMe').and.callFake(function (evt) {
+        jasmineReact.spyOnClass(nh.views.Article, 'selectArticle').and.callFake(function (evt) {
             evt.preventDefault();
         });
 
@@ -62,7 +62,7 @@ describe('A news article view', function () {
 
         // Expectations
         expect(view.getInitialState().isNew).toBe(false);
-        expect(jasmineReact.classPrototype(nh.views.Article).youClickedOnMe).toHaveBeenCalled();
+        expect(jasmineReact.classPrototype(nh.views.Article).selectArticle).toHaveBeenCalled();
     });
 });
 
@@ -182,6 +182,39 @@ describe('A news article listing view', function () {
             // Expectations
             expect(view.state.articles[view.state.articles.length - 1].id).toBe(4);
         });
+    });
+});
+
+describe('A news article view', function () {
+    beforeEach(function () {
+        loadFixtures('view-dumper.html');
+
+        jasmine.addMatchers({
+            toEqualReactHTML: jasmine.customMatchers.toEqualReactHTML
+        });
+
+        $el = $('#viewDumper');
+    });
+
+    it('will render in given component', function () {
+        // Actions
+        view = React.renderComponent(<nh.views.FullArticle id={ 1 } title='Some test title'
+                description='<p>Some test description</p>' />, $el[0]);
+
+        // Expectations
+        expect($el.html()).toEqualReactHTML(
+                '<article data-article-id="1">'
+                    + '<header>'
+                        + '<h1>Some test title</h1>'
+                    + '</header>'
+                    + '<div class="articleContent">'
+                        + '<p>Some test description</p>'
+                    + '</div>'
+                    + '<footer>'
+                        + '<a href="#">Share This</a>'
+                    + '</footer>'
+                + '</article>'
+        );
     });
 });
 

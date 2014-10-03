@@ -39,6 +39,7 @@ module.exports = function(grunt) {
                     'prop.js',
                     'assets/js/common/config.js',
                     'assets/js/compiled/lib/utils.js',
+                    'assets/js/lib/event-listener.js',
                     'assets/js/compiled/abstract.js',
                     'assets/js/compiled/views/templates.js',
                     'assets/js/compiled/views/news-poll-view.js',

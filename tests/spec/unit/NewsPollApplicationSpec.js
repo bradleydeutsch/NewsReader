@@ -149,3 +149,93 @@ describe('A news poll application', function () {
         });
     });
 });
+
+describe('A news article application', function () {
+    var backups = {
+            react: React,
+            fullArticle: nh.views.FullArticle
+        },
+        mockedFullArticle, application;
+
+    beforeEach(function () {
+        loadFixtures('article-container.html');
+
+        mockedFullArticle = jasmine.createSpy('nh.views.FullArticle');
+
+        React = {
+            renderComponent: function () {
+            }
+        };
+        nh.views.FullArticle = jasmine.createSpy('nh.views.FullArticle').and.callFake(function () {
+            return mockedFullArticle;
+        });
+    });
+
+    afterEach(function () {
+        React = backups.react;
+        nh.views.FullArticle = backups.fullArticle;
+    });
+
+    it('can be created and return an instance of nh.applications.NewsArticle', function () {
+        // Actions
+        application = new nh.applications.NewsArticle();
+
+        // Expectations
+        expect(application instanceof nh.applications.NewsArticle).toBe(true);
+    });
+
+    it('will instantiate the full article view', function () {
+        // Before
+        spyOn(React, 'renderComponent').and.returnValue(mockedFullArticle);
+
+        // Actions
+        application = new nh.applications.NewsArticle();
+
+        // Expectations
+        expect(React.renderComponent).toHaveBeenCalledWith(mockedFullArticle, $('#articleContainer')[0]);
+        expect(application.el).toBe(mockedFullArticle);
+    });
+
+    describe('that has been instantiated', function () {
+        beforeEach(function () {
+            spyOn(React, 'renderComponent').and.returnValue(mockedFullArticle);
+            application = new nh.applications.NewsArticle();
+        });
+
+        it('can extract articles from a list on the page', function () {
+            var article;
+
+            // Actions
+            article = application.extractArticle($('#articleContainer'));
+
+            // Expectations
+            expect(article).toEqual({
+                id: 1,
+                title: 'Some Selected Article',
+                description: '<p>Lorem ipsum dolor sit amet, abhorreant mediocritatem necessitatibus an has, '
+                    + 'labores ceteros mel ei. An cum exerci doming. Ex periculis consulatu eum, ex percipit '
+                    + 'vivendum erroribus mea. Id vel quidam accusata temporibus, ne zril aperiam suscipit pro. '
+                    + 'In nam wisi oblique intellegat, mea no brute quaerendum, eu sea offendit copiosae. Vitae '
+                    + 'graeci legendos sed in, sed id nisl probo adipisci, ne magna regione vis.</p>'
+            });
+        });
+
+        it('can render an article in its view element', function () {
+            var article;
+
+            // Before
+            article = {
+                id: 2,
+                title: 'Test title',
+                description: 'Some description'
+            };
+
+            // Actions
+            application.render(article);
+
+            // Expectations
+            expect(React.renderComponent).toHaveBeenCalledWith(mockedFullArticle, $('#articleContainer')[0]);
+            expect(application.el).toBe(mockedFullArticle);
+        });
+    });
+});

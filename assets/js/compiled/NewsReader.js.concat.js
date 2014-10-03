@@ -38857,6 +38857,8 @@ nh.PROPS = {
 
         nh.utils = {};
 
+        nh.eventHandler = {};
+
         nh.views = {};
 
         nh.applications = {};
@@ -38973,6 +38975,89 @@ nh.PROPS = {
         }
     };
 }(nh.utils));;(function (nh) {
+    var subscribers = {},
+        ROOT = 'root',
+        eventHandler;
+
+    eventHandler = nh.eventHandler || {};
+
+    eventHandler.events = {
+        ARTICLE_SELECTED: 'articleSelected'
+    };
+
+    eventHandler.subscribe = function (el, events, fns, context) {
+        var event, uniqueFn, i, j, k;
+
+        el = el ? el.cid : ROOT;
+        events = (nh.utils.typeCompare(events, nh.utils.types.ARRAY)) ? events : [events];
+        fns = (nh.utils.typeCompare(fns, nh.utils.types.ARRAY)) ? fns: [fns];
+        context = context || this;
+
+        for (i = 0; i < events.length; i++) {
+            event = events[i];
+
+            if (!subscribers.hasOwnProperty(el)) {
+                subscribers[el] = {};
+            }
+            if (!subscribers.hasOwnProperty(event)) {
+                subscribers[el][event] = [];
+            }
+            for (j = 0; j < fns.length; j++) {
+                uniqueFn = true;
+
+                for (k = 0; k < subscribers[el][event].length; k++) {
+                    if (subscribers[el][event][k].fn.toString() === fns[j].toString()) {
+                        uniqueFn = false;
+                    }
+                }
+                if (uniqueFn) {
+                    subscribers[el][event].push({
+                        fn: fns[j],
+                        context: context
+                    });
+                }
+            }
+        }
+    };
+
+    eventHandler.unsubscribe = function (el, events) {
+        var event, i;
+
+        el = el ? el.cid : ROOT;
+        events = (nh.utils.typeCompare(events, nh.utils.types.ARRAY)) ? events : [events];
+
+        for (i = 0; i < events.length; i++) {
+            event = events[i];
+
+            if ((subscribers.hasOwnProperty(el)) && (subscribers[el].hasOwnProperty(event))) {
+                delete subscribers[el][event];
+            }
+        }
+    };
+
+    eventHandler.publish = function (el, events, data) {
+        var event, fns, i, j;
+
+        el = el ? el.cid : ROOT;
+        events = (nh.utils.typeCompare(events, nh.utils.types.ARRAY)) ? events : [events];
+
+        for (i = 0; i < events.length; i++) {
+            event = events[i];
+
+            if ((subscribers.hasOwnProperty(el)) && (subscribers[el].hasOwnProperty(event))) {
+                fns = subscribers[el][events];
+
+                for (j = 0; j < fns.length; j++) {
+                    fns[j].fn.call(fns[j].context, event, data);
+                }
+            }
+        }
+    };
+
+    eventHandler.getSubscribers = function () {
+        return subscribers;
+    };
+}(nh));;(function (nh) {
     nh.SuperObject = function () {};
 
     nh.SuperObject.prototype.init = function () {
@@ -39010,16 +39095,16 @@ nh.PROPS = {
             }
         },
 
-        youClickedOnMe: function (evt) {
+        selectArticle: function (evt) {
             evt.preventDefault();
 
-            alert('Heyyyy, you clicked on "' + this.props.title + '", good for you!');
+            nh.eventHandler.publish(null, nh.eventHandler.events.ARTICLE_SELECTED, this);
         },
 
         render: function () {
             return (
                 React.DOM.li({'data-article-id':  this.props.id, className:  this.state.isNew ? 'new' : ''}, 
-                    React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.youClickedOnMe}, 
+                    React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.selectArticle}, 
                         React.DOM.h3(null,  this.props.title), 
                         React.DOM.div({dangerouslySetInnerHTML: { __html: this.props.description}})
                     )
@@ -39059,9 +39144,11 @@ nh.PROPS = {
         },
 
         buildArticleListings: function () {
+            var _this = this;
+
             return this.state.articles.map(function (article) {
                 return nh.views.Article({key:  article.id, id:  article.id, title:  article.title, 
-                    description:  article.description, isNew:  article.isNew});
+                    description:  article.description, isNew:  article.isNew, parent: _this });
             });
         },
 
@@ -39069,6 +39156,22 @@ nh.PROPS = {
             return (
                 React.DOM.ul({className: "articleListing"}, 
                      this.buildArticleListings() 
+                )
+            );
+        }
+    });
+
+    nh.views.FullArticle = React.createClass({displayName: 'FullArticle',
+        render: function () {
+            return (
+                React.DOM.article({'data-article-id':  this.props.id}, 
+                    React.DOM.header(null, 
+                        React.DOM.h1(null,  this.props.title)
+                    ), 
+                    React.DOM.div({className: "articleContent", dangerouslySetInnerHTML: { __html: this.props.description}}), 
+                    React.DOM.footer(null, 
+                        React.DOM.a({href: "#"}, "Share This")
+                    )
                 )
             );
         }
@@ -39093,10 +39196,9 @@ nh.PROPS = {
                 transports: nh.config.NODE.TRANSPORTS
             });
 
-            _this.$el = $(document.getElementById('articlesContainer'));
+            _this.$el = $('#articlesContainer');
             _this.el = React.renderComponent(
-                nh.views.ArticleList({articles:  _this.extractArticles(_this.$el), 
-                        limit:  _this.ARTICLE_LIMIT}),
+                nh.views.ArticleList({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
                 _this.$el[0]
             );
 
@@ -39137,6 +39239,36 @@ nh.PROPS = {
             this.el.addArticles(data);
         }
     });
+
+    nh.applications.NewsArticle = nh.applications.AbstractApp.extend({
+        ARTICLE_LIMIT: 10,
+
+        init: function () {
+            var _this = this;
+
+            nh.applications.NewsArticle.__super__.init.apply(_this, arguments);
+
+            _this.$el = $('#articleContainer');
+            _this.render(_this.extractArticle(_this.$el));
+
+            return _this;
+        },
+
+        extractArticle: function (el) {
+            return {
+                id: el.find('article').data('article-id'),
+                title: el.find('h1').text().trim(),
+                description: el.find('.articleContent').html().trim()
+            };
+        },
+
+        render: function (article) {
+            this.el = React.renderComponent(
+                nh.views.FullArticle({id:  article.id, title:  article.title, description:  article.description}),
+                this.$el[0]
+            );
+        }
+    });
 })(nh, $);;(function (nh) {
     nh.pages.AbstractPage = nh.SuperObject.extend({
         constructor: function () {
@@ -39148,9 +39280,19 @@ nh.PROPS = {
         init: function () {
             var _this = this;
 
-            nh.pages.PageController.__super__.init.apply(this, arguments);
+            nh.pages.PageController.__super__.init.apply(_this, arguments);
 
-            this.newsPoll = new nh.applications.NewsPoll();
+            _this.newsArticle = new nh.applications.NewsArticle();
+            _this.newsPoll = new nh.applications.NewsPoll();
+
+            nh.eventHandler.subscribe(null, nh.eventHandler.events.ARTICLE_SELECTED,
+                _this.handleArticleSelected.bind(_this));
+
+            return _this;
+        },
+
+        handleArticleSelected: function (event, data) {
+            this.newsArticle.render(data.props);
         }
     });
 })(nh);;nh.pages.currentPage = new nh.pages.PageController();

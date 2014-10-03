@@ -20,16 +20,16 @@
             }
         },
 
-        youClickedOnMe: function (evt) {
+        selectArticle: function (evt) {
             evt.preventDefault();
 
-            alert('Heyyyy, you clicked on "' + this.props.title + '", good for you!');
+            nh.eventHandler.publish(null, nh.eventHandler.events.ARTICLE_SELECTED, this);
         },
 
         render: function () {
             return (
                 React.DOM.li({'data-article-id':  this.props.id, className:  this.state.isNew ? 'new' : ''}, 
-                    React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.youClickedOnMe}, 
+                    React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.selectArticle}, 
                         React.DOM.h3(null,  this.props.title), 
                         React.DOM.div({dangerouslySetInnerHTML: { __html: this.props.description}})
                     )
@@ -69,9 +69,11 @@
         },
 
         buildArticleListings: function () {
+            var _this = this;
+
             return this.state.articles.map(function (article) {
                 return nh.views.Article({key:  article.id, id:  article.id, title:  article.title, 
-                    description:  article.description, isNew:  article.isNew});
+                    description:  article.description, isNew:  article.isNew, parent: _this });
             });
         },
 
@@ -79,6 +81,22 @@
             return (
                 React.DOM.ul({className: "articleListing"}, 
                      this.buildArticleListings() 
+                )
+            );
+        }
+    });
+
+    nh.views.FullArticle = React.createClass({displayName: 'FullArticle',
+        render: function () {
+            return (
+                React.DOM.article({'data-article-id':  this.props.id}, 
+                    React.DOM.header(null, 
+                        React.DOM.h1(null,  this.props.title)
+                    ), 
+                    React.DOM.div({className: "articleContent", dangerouslySetInnerHTML: { __html: this.props.description}}), 
+                    React.DOM.footer(null, 
+                        React.DOM.a({href: "#"}, "Share This")
+                    )
                 )
             );
         }

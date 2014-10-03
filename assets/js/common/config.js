@@ -27,6 +27,8 @@
 
         nh.utils = {};
 
+        nh.eventHandler = {};
+
         nh.views = {};
 
         nh.applications = {};
