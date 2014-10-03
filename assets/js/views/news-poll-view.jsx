@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 (function (nh) {
-    nh.views.Article = React.createClass({
+    nh.views.ArticleListing = React.createClass({
         getInitialState: function() {
             return {
                 isNew: nh.utils.typeCompare(this.props.isNew, nh.utils.types.BOOLEAN) ? this.props.isNew : true
@@ -38,7 +38,7 @@
         }
     });
 
-    nh.views.ArticleList = React.createClass({
+    nh.views.ArticlesListing = React.createClass({
         getInitialState: function() {
             return {
                 limit: this.props.limit,
@@ -72,7 +72,7 @@
             var _this = this;
 
             return this.state.articles.map(function (article) {
-                return <nh.views.Article key={ article.id } id={ article.id } title={ article.title }
+                return <nh.views.ArticleListing key={ article.id } id={ article.id } title={ article.title }
                     description={ article.description } isNew={ article.isNew } parent={ _this } />;
             });
         },
@@ -86,7 +86,7 @@
         }
     });
 
-    nh.views.FullArticle = React.createClass({
+    nh.views.Article = React.createClass({
         render: function () {
             return (
                 <article data-article-id={ this.props.id }>

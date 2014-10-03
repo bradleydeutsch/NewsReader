@@ -1,15 +1,15 @@
 describe('A news poll application', function () {
     var backups = {
             react: React,
-            articleList: nh.views.ArticleList
+            articlesListing: nh.views.ArticlesListing
         },
-        socket, mockedArticleList, application;
+        socket, mockedArticlesListing, application;
 
     beforeEach(function () {
         loadFixtures('articles-container.html');
 
         socket = jasmine.createSpyObj('socket', ['on', 'emit']);
-        mockedArticleList = jasmine.createSpyObj('nh.views.ArticleList', ['addArticle', 'addArticles']);
+        mockedArticlesListing = jasmine.createSpyObj('nh.views.ArticlesListing', ['addArticle', 'addArticles']);
 
         io = {
             connect: function () {
@@ -22,27 +22,27 @@ describe('A news poll application', function () {
             renderComponent: function () {
             }
         };
-        nh.views.ArticleList = jasmine.createSpy('nh.views.ArticleList').and.callFake(function () {
-            return mockedArticleList;
+        nh.views.ArticlesListing = jasmine.createSpy('nh.views.ArticlesListing').and.callFake(function () {
+            return mockedArticlesListing;
         });
     });
 
     afterEach(function () {
         React = backups.react;
-        nh.views.ArticleList = backups.articleList;
+        nh.views.ArticlesListing = backups.articlesListing;
     });
 
-    it('can be created and return an instance of nh.applications.NewsPoll', function () {
+    it('can be created and return an instance of nh.applications.NewsPoller', function () {
         // Actions
-        application = new nh.applications.NewsPoll();
+        application = new nh.applications.NewsPoller();
 
         // Expectations
-        expect(application instanceof nh.applications.NewsPoll).toBe(true);
+        expect(application instanceof nh.applications.NewsPoller).toBe(true);
     });
 
     it('will create a connection to the websocket', function () {
         // Actions
-        application = new nh.applications.NewsPoll();
+        application = new nh.applications.NewsPoller();
 
         // Expectations
         expect(io.connect).toHaveBeenCalledWith(nh.config.NODE.URL, {
@@ -53,7 +53,7 @@ describe('A news poll application', function () {
 
     it('will bind to websocket event handlers', function () {
         // Actions
-        application = new nh.applications.NewsPoll();
+        application = new nh.applications.NewsPoller();
 
         // Expectations
         expect(socket.on.calls.argsFor(0))
@@ -64,20 +64,20 @@ describe('A news poll application', function () {
 
     it('will instantiate the article list view', function () {
         // Before
-        spyOn(React, 'renderComponent').and.returnValue(mockedArticleList);
+        spyOn(React, 'renderComponent').and.returnValue(mockedArticlesListing);
 
         // Actions
-        application = new nh.applications.NewsPoll();
+        application = new nh.applications.NewsPoller();
 
         // Expectations
-        expect(React.renderComponent).toHaveBeenCalledWith(mockedArticleList, $('#articlesContainer')[0]);
-        expect(application.el).toBe(mockedArticleList);
+        expect(React.renderComponent).toHaveBeenCalledWith(mockedArticlesListing, $('#articlesContainer')[0]);
+        expect(application.el).toBe(mockedArticlesListing);
     });
 
     describe('that has been instantiated', function () {
         beforeEach(function () {
-            spyOn(React, 'renderComponent').and.returnValue(mockedArticleList);
-            application = new nh.applications.NewsPoll();
+            spyOn(React, 'renderComponent').and.returnValue(mockedArticlesListing);
+            application = new nh.applications.NewsPoller();
         });
 
         it('can extract articles from a list on the page', function () {
@@ -121,7 +121,7 @@ describe('A news poll application', function () {
             application.addArticle(article);
 
             // Expectations
-            expect(mockedArticleList.addArticle).toHaveBeenCalledWith(article);
+            expect(mockedArticlesListing.addArticle).toHaveBeenCalledWith(article);
         });
 
         it('can have a list of articles added to its list', function () {
@@ -145,7 +145,7 @@ describe('A news poll application', function () {
             application.addArticles(articles);
 
             // Expectations
-            expect(mockedArticleList.addArticles).toHaveBeenCalledWith(articles);
+            expect(mockedArticlesListing.addArticles).toHaveBeenCalledWith(articles);
         });
     });
 });
@@ -153,27 +153,27 @@ describe('A news poll application', function () {
 describe('A news article application', function () {
     var backups = {
             react: React,
-            fullArticle: nh.views.FullArticle
+            fullArticle: nh.views.Article
         },
         mockedFullArticle, application;
 
     beforeEach(function () {
         loadFixtures('article-container.html');
 
-        mockedFullArticle = jasmine.createSpy('nh.views.FullArticle');
+        mockedFullArticle = jasmine.createSpy('nh.views.Article');
 
         React = {
             renderComponent: function () {
             }
         };
-        nh.views.FullArticle = jasmine.createSpy('nh.views.FullArticle').and.callFake(function () {
+        nh.views.Article = jasmine.createSpy('nh.views.Article').and.callFake(function () {
             return mockedFullArticle;
         });
     });
 
     afterEach(function () {
         React = backups.react;
-        nh.views.FullArticle = backups.fullArticle;
+        nh.views.Article = backups.fullArticle;
     });
 
     it('can be created and return an instance of nh.applications.NewsArticle', function () {

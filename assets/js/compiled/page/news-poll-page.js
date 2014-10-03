@@ -14,7 +14,7 @@
             nh.pages.PageController.__super__.init.apply(_this, arguments);
 
             _this.newsArticle = new nh.applications.NewsArticle();
-            _this.newsPoll = new nh.applications.NewsPoll();
+            _this.newsPoll = new nh.applications.NewsPoller();
 
             nh.eventHandler.subscribe(null, nh.eventHandler.events.ARTICLE_SELECTED,
                 _this.handleArticleSelected.bind(_this));

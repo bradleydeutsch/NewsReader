@@ -16,7 +16,7 @@ describe('A news article list view', function () {
 
     it('will render a list item into a given component', function () {
         // Actions
-        view = React.renderComponent(<nh.views.Article key={ 3 } id={ 3 } title='Some test title'
+        view = React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
                 description='Some test description' isNew={ false } />, $el[0]);
 
         // Expectations
@@ -36,7 +36,7 @@ describe('A news article list view', function () {
         jasmine.clock().install();
 
         // Actions
-        view = React.renderComponent(<nh.views.Article key={ 3 } id={ 3 } title='Some test title'
+        view = React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
                 description='Some test description' isNew={ true } />, $el[0]);
 
         // Expectations
@@ -51,18 +51,18 @@ describe('A news article list view', function () {
 
     it('will call a custom function when it\'s link is clicked on', function () {
         // Before
-        jasmineReact.spyOnClass(nh.views.Article, 'selectArticle').and.callFake(function (evt) {
+        jasmineReact.spyOnClass(nh.views.ArticleListing, 'selectArticle').and.callFake(function (evt) {
             evt.preventDefault();
         });
 
         // Actions
-        view = React.renderComponent(<nh.views.Article key={ 3 } id={ 3 } title='Some test title'
+        view = React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
                 description='Some test description' isNew={ false } />, $el[0]);
         $el.find('li a')[0].click();
 
         // Expectations
         expect(view.getInitialState().isNew).toBe(false);
-        expect(jasmineReact.classPrototype(nh.views.Article).selectArticle).toHaveBeenCalled();
+        expect(jasmineReact.classPrototype(nh.views.ArticleListing).selectArticle).toHaveBeenCalled();
     });
 });
 
@@ -103,11 +103,11 @@ describe('A news article listing view', function () {
         var articles;
 
         // Before
-        jasmineReact.createStubComponent(nh.views, 'Article');
+        jasmineReact.createStubComponent(nh.views, 'ArticleListing');
         articles = generateArticles(2);
 
         // Actions
-        view = React.renderComponent(<nh.views.ArticleList articles={ articles } limit={ 5 } />, $el[0]);
+        view = React.renderComponent(<nh.views.ArticlesListing articles={ articles } limit={ 5 } />, $el[0]);
 
         // Expectations
         expect($el.html()).toEqualReactHTML(
@@ -125,9 +125,10 @@ describe('A news article listing view', function () {
         var view;
 
         beforeEach(function () {
-            jasmineReact.createStubComponent(nh.views, 'Article');
+            jasmineReact.createStubComponent(nh.views, 'ArticleListing');
 
-            view = React.renderComponent(<nh.views.ArticleList articles={ generateArticles(3) } limit={ 5 } />, $el[0]);
+            view = React.renderComponent(<nh.views.ArticlesListing articles={ generateArticles(3) } limit={ 5 } />,
+                    $el[0]);
         });
 
         it('can have an article added to it', function () {
@@ -198,7 +199,7 @@ describe('A news article view', function () {
 
     it('will render in given component', function () {
         // Actions
-        view = React.renderComponent(<nh.views.FullArticle id={ 1 } title='Some test title'
+        view = React.renderComponent(<nh.views.Article id={ 1 } title='Some test title'
                 description='<p>Some test description</p>' />, $el[0]);
 
         // Expectations

@@ -1,5 +1,5 @@
 module.exports = function (nh, io, util) {
-    nh.applications.NewsPoll = function () {
+    nh.applications.NewsPoller = function () {
         this.collection = [];
 
         this.init = function () {

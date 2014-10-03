@@ -9,4 +9,4 @@ require('./assets/js/common/config.js')(nh);
 
 require('./assets/js/node/news-poll-application')(nh, io, util);
 
-application = new nh.applications.NewsPoll();
+application = new nh.applications.NewsPoller();

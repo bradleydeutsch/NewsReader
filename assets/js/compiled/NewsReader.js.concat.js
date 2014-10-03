@@ -39076,7 +39076,7 @@ nh.PROPS = {
         }
     })
 })(nh.templates);;(function (nh) {
-    nh.views.Article = React.createClass({displayName: 'Article',
+    nh.views.ArticleListing = React.createClass({displayName: 'ArticleListing',
         getInitialState: function() {
             return {
                 isNew: nh.utils.typeCompare(this.props.isNew, nh.utils.types.BOOLEAN) ? this.props.isNew : true
@@ -39113,7 +39113,7 @@ nh.PROPS = {
         }
     });
 
-    nh.views.ArticleList = React.createClass({displayName: 'ArticleList',
+    nh.views.ArticlesListing = React.createClass({displayName: 'ArticlesListing',
         getInitialState: function() {
             return {
                 limit: this.props.limit,
@@ -39147,7 +39147,7 @@ nh.PROPS = {
             var _this = this;
 
             return this.state.articles.map(function (article) {
-                return nh.views.Article({key:  article.id, id:  article.id, title:  article.title, 
+                return nh.views.ArticleListing({key:  article.id, id:  article.id, title:  article.title, 
                     description:  article.description, isNew:  article.isNew, parent: _this });
             });
         },
@@ -39161,7 +39161,7 @@ nh.PROPS = {
         }
     });
 
-    nh.views.FullArticle = React.createClass({displayName: 'FullArticle',
+    nh.views.Article = React.createClass({displayName: 'Article',
         render: function () {
             return (
                 React.DOM.article({'data-article-id':  this.props.id}, 
@@ -39183,13 +39183,13 @@ nh.PROPS = {
         }
     });
 
-    nh.applications.NewsPoll = nh.applications.AbstractApp.extend({
+    nh.applications.NewsPoller = nh.applications.AbstractApp.extend({
         ARTICLE_LIMIT: 10,
 
         init: function () {
             var _this = this;
 
-            nh.applications.NewsPoll.__super__.init.apply(_this, arguments);
+            nh.applications.NewsPoller.__super__.init.apply(_this, arguments);
 
             _this.socket = io.connect(nh.config.NODE.URL, {
                 port: nh.config.NODE.PORT,
@@ -39198,7 +39198,7 @@ nh.PROPS = {
 
             _this.$el = $('#articlesContainer');
             _this.el = React.renderComponent(
-                nh.views.ArticleList({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
+                nh.views.ArticlesListing({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
                 _this.$el[0]
             );
 
@@ -39264,7 +39264,7 @@ nh.PROPS = {
 
         render: function (article) {
             this.el = React.renderComponent(
-                nh.views.FullArticle({id:  article.id, title:  article.title, description:  article.description}),
+                nh.views.Article({id:  article.id, title:  article.title, description:  article.description}),
                 this.$el[0]
             );
         }
@@ -39283,7 +39283,7 @@ nh.PROPS = {
             nh.pages.PageController.__super__.init.apply(_this, arguments);
 
             _this.newsArticle = new nh.applications.NewsArticle();
-            _this.newsPoll = new nh.applications.NewsPoll();
+            _this.newsPoll = new nh.applications.NewsPoller();
 
             nh.eventHandler.subscribe(null, nh.eventHandler.events.ARTICLE_SELECTED,
                 _this.handleArticleSelected.bind(_this));

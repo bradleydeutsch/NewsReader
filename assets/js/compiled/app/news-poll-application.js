@@ -7,13 +7,13 @@
         }
     });
 
-    nh.applications.NewsPoll = nh.applications.AbstractApp.extend({
+    nh.applications.NewsPoller = nh.applications.AbstractApp.extend({
         ARTICLE_LIMIT: 10,
 
         init: function () {
             var _this = this;
 
-            nh.applications.NewsPoll.__super__.init.apply(_this, arguments);
+            nh.applications.NewsPoller.__super__.init.apply(_this, arguments);
 
             _this.socket = io.connect(nh.config.NODE.URL, {
                 port: nh.config.NODE.PORT,
@@ -22,7 +22,7 @@
 
             _this.$el = $('#articlesContainer');
             _this.el = React.renderComponent(
-                nh.views.ArticleList({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
+                nh.views.ArticlesListing({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
                 _this.$el[0]
             );
 
@@ -88,7 +88,7 @@
 
         render: function (article) {
             this.el = React.renderComponent(
-                nh.views.FullArticle({id:  article.id, title:  article.title, description:  article.description}),
+                nh.views.Article({id:  article.id, title:  article.title, description:  article.description}),
                 this.$el[0]
             );
         }
