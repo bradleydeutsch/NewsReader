@@ -7,7 +7,8 @@ describe('A news article view', function () {
         loadFixtures('view-dumper.html');
 
         jasmine.addMatchers({
-            toEqualReactHTML: jasmine.customMatchers.toEqualReactHTML
+            toEqualReactHTML: jasmine.customMatchers.toEqualReactHTML,
+            toHaveSize: jasmine.customMatchers.toHaveSize
         });
 
         $el = $('#viewDumper');
@@ -27,7 +28,7 @@ describe('A news article view', function () {
                 '</a>'
             + '</li>'
         );
-        expect(jasmine.util.getObjectSize(view.getInitialState())).toBe(1);
+        expect(view.getInitialState()).toHaveSize(1);
     });
 
     it('will remove the "new" class from an element after 100ms', function () {
@@ -72,7 +73,8 @@ describe('A news article listing view', function () {
         loadFixtures('view-dumper.html');
 
         jasmine.addMatchers({
-            toEqualReactHTML: jasmine.customMatchers.toEqualReactHTML
+            toEqualReactHTML: jasmine.customMatchers.toEqualReactHTML,
+            toHaveSize: jasmine.customMatchers.toHaveSize
         });
 
         $el = $('#viewDumper');
@@ -114,7 +116,7 @@ describe('A news article listing view', function () {
                 + '<div></div>'
             + '</ul>'
         );
-        expect(jasmine.util.getObjectSize(view.getInitialState())).toBe(2);
+        expect(view.getInitialState()).toHaveSize(2);
         expect(view.getInitialState().limit).toBe(5);
         expect(view.getInitialState().articles).toBe(articles);
     });

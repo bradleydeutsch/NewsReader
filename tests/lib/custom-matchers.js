@@ -70,4 +70,27 @@
             }
         }
     };
+
+    customMatchers.toHaveSize = function () {
+        return {
+            compare: function (obj, size) {
+                var result = {
+                        pass: true
+                    },
+                    objSize = 0;
+
+                for (key in obj) {
+                    objSize++;
+                }
+
+                if (objSize !== size) {
+                    result.pass = false;
+                    result.message
+                        = 'Expected \'' + obj + '\' to have a size of ' + size + ', but it had size ' + objSize;
+                }
+
+                return result;
+            }
+        }
+    };
 }(jasmine));
