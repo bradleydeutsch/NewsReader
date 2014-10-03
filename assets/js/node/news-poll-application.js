@@ -14,7 +14,7 @@ module.exports = function (nh, io, util) {
 
             _this.setEventHandlers();
 
-            _this.poller = _this.poll();
+            _this.poller = _this.setPollingInterval();
 
             return this;
         };
@@ -44,20 +44,17 @@ module.exports = function (nh, io, util) {
             this.collection.unshift(data);
         };
 
-        this.poll = function () {
-            var _this = this,
-                interval;
+        this.pollArticles = function () {
+            if (this.collection.length > 0) {
+                util.log('Articles Polled');
 
-            interval = setInterval(function () {
-                if (_this.collection.length > 0) {
-                    util.log('Articles Polled');
+                this.client.emit(nh.config.NODE.EVENTS.ARTICLES_ADDED, this.collection);
+                this.collection = [];
+            }
+        };
 
-                    _this.client.emit(nh.config.NODE.EVENTS.ARTICLES_ADDED, _this.collection);
-                    _this.collection = [];
-                }
-            }, nh.config.POLLING.ARTICLES);
-
-            return interval;
+        this.setPollingInterval = function () {
+            return setInterval(this.pollArticles.bind(this), nh.config.POLLING.ARTICLES);
         };
 
         return this.init();

@@ -23,13 +23,13 @@ module.exports = function(config) {
             <!-- source files -->
 
             'assets/js/common/config.js',
-            'assets/js/compiled/lib/utils.js',
-            'assets/js/compiled/abstract.js',
-            'assets/js/compiled/views/templates.js',
+            'assets/js/lib/utils.jsx',
+            'assets/js/abstract.jsx',
+            'assets/js/views/templates.jsx',
 
-            'assets/js/compiled/views/news-poll-view.js',
-            'assets/js/compiled/app/news-poll-application.js',
-            'assets/js/compiled/page/news-poll-page.js',
+            'assets/js/views/news-poll-view.jsx',
+            'assets/js/app/news-poll-application.jsx',
+            'assets/js/page/news-poll-page.jsx',
 
             <!-- specs -->
 

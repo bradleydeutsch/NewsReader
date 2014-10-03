@@ -22,7 +22,7 @@
 
         youClickedOnMe: function (evt) {
             evt.preventDefault();
-console.log("IM HERE!!!");
+
             alert('Heyyyy, you clicked on "' + this.props.title + '", good for you!');
         },
 

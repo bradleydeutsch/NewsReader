@@ -25,5 +25,15 @@
         }
 
         return ret;
+    };
+
+    utils.getObjectSize = function (obj) {
+        var ret = 0;
+
+        for (key in obj) {
+            ret++;
+        }
+
+        return ret;
     }
 }(jasmine.util));

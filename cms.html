@@ -22,7 +22,7 @@
         <script type="text/javascript">
             socket = io.connect(nh.config.NODE.URL, {
                 port: nh.config.NODE.PORT,
-                transports: ['websocket']
+                transports: nh.config.NODE.TRANSPORTS
             });
 
             $('form').bind('submit', function (evt) {
