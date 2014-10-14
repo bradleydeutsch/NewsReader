@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (nh, $) {
     nh.applications.AbstractApp = nh.SuperObject.extend({
@@ -21,7 +21,7 @@
             });
 
             _this.$el = $('#articlesContainer');
-            _this.el = React.renderComponent(
+            _this.el = nh.React.renderComponent(
                 nh.views.ArticlesListing({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
                 _this.$el[0]
             );
@@ -87,7 +87,7 @@
         },
 
         render: function (article) {
-            this.el = React.renderComponent(
+            this.el = nh.React.renderComponent(
                 nh.views.Article({id:  article.id, title:  article.title, description:  article.description}),
                 this.$el[0]
             );

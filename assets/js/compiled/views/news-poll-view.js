@@ -1,7 +1,7 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (nh) {
-    nh.views.ArticleListing = React.createClass({displayName: 'ArticleListing',
+    nh.views.ArticleListing = nh.React.createClass({
         getInitialState: function() {
             return {
                 isNew: nh.utils.typeCompare(this.props.isNew, nh.utils.types.BOOLEAN) ? this.props.isNew : true
@@ -28,17 +28,17 @@
 
         render: function () {
             return (
-                React.DOM.li({'data-article-id':  this.props.id, className:  this.state.isNew ? 'new' : ''}, 
-                    React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.selectArticle}, 
-                        React.DOM.h3(null,  this.props.title), 
-                        React.DOM.div({dangerouslySetInnerHTML: { __html: this.props.description}})
+                nh.React.DOM.li({'data-article-id':  this.props.id, className:  this.state.isNew ? 'new' : ''}, 
+                    nh.React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.selectArticle}, 
+                        nh.React.DOM.h3(null,  this.props.title), 
+                        nh.React.DOM.div({dangerouslySetInnerHTML: { __html: this.props.description}})
                     )
                 )
             );
         }
     });
 
-    nh.views.ArticlesListing = React.createClass({displayName: 'ArticlesListing',
+    nh.views.ArticlesListing = nh.React.createClass({
         getInitialState: function() {
             return {
                 limit: this.props.limit,
@@ -79,23 +79,23 @@
 
         render: function () {
             return (
-                React.DOM.ul({className: "articleListing"}, 
+                nh.React.DOM.ul({className: "articleListing"}, 
                      this.buildArticleListings() 
                 )
             );
         }
     });
 
-    nh.views.Article = React.createClass({displayName: 'Article',
+    nh.views.Article = nh.React.createClass({
         render: function () {
             return (
-                React.DOM.article({'data-article-id':  this.props.id}, 
-                    React.DOM.header(null, 
-                        React.DOM.h1(null,  this.props.title)
+                nh.React.DOM.article({'data-article-id':  this.props.id}, 
+                    nh.React.DOM.header(null, 
+                        nh.React.DOM.h1(null,  this.props.title)
                     ), 
-                    React.DOM.div({className: "articleContent", dangerouslySetInnerHTML: { __html: this.props.description}}), 
-                    React.DOM.footer(null, 
-                        React.DOM.a({href: "#"}, "Share This")
+                    nh.React.DOM.div({className: "articleContent", dangerouslySetInnerHTML: { __html: this.props.description}}), 
+                    nh.React.DOM.footer(null, 
+                        nh.React.DOM.a({href: "#"}, "Share This")
                     )
                 )
             );

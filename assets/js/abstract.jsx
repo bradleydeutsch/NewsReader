@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (nh) {
     nh.SuperObject = function () {};

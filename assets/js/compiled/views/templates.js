@@ -1,11 +1,11 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (templates) {
-    templates.PageLoader = React.createClass({displayName: 'PageLoader',
+    templates.PageLoader = nh.React.createClass({
         render: function () {
             return (
-                React.DOM.div({id: "pageLoader"}, 
-                    React.DOM.h1(null, "Please wait...")
+                nh.React.DOM.div({id: "pageLoader"}, 
+                    nh.React.DOM.h1(null, "Please wait...")
                 )
             );
         }

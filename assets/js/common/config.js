@@ -1,7 +1,7 @@
-(function (context) {
+(function (context, window) {
     var exports;
 
-    exports = function (nh) {
+    exports = function (nh, window) {
         nh = nh || {};
 
         nh.config = {
@@ -36,11 +36,16 @@
         nh.pages = {};
 
         nh.templates = {};
+
+        if (window && window.React) {
+            nh.React = window.React;
+            delete window.React;
+        }
     };
 
     if (context.hasOwnProperty('exports')) {
         context.exports = exports;
     } else {
-        exports(context);
+        exports(context, window);
     }
-})(typeof module === 'undefined' ? nh : module);
+})(typeof module === 'undefined' ? nh : module, typeof module === 'undefined' ? window : null);

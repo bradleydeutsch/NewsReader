@@ -1,30 +1,33 @@
 describe('A news poll page', function () {
-    var backups = {
-            eventHandler: nh.eventHandler,
-            newsArticleApplication: nh.applications.NewsArticle,
-            newsPollerApplication: nh.applications.NewsPoller
-        },
-        mockedNewsArticleApplication, mockedNewsPollerApplication, page;
+    var mockedNewsArticleApplication, mockedNewsPollerApplication, page;
 
     beforeEach(function () {
-        mockedNewsArticleApplication = jasmine.util.mock(backups.newsArticleApplication);
-        mockedNewsPollerApplication = jasmine.util.mock(backups.newsPollerApplication);
+        var nhEventHandler, nhApplicationsNewsArticle, nhApplicationsNewsPoller;
 
-        nh.eventHandler = jasmine.util.mockObj(nh.eventHandler, {
+        mockedNewsArticleApplication = jasmine.util.mock(nh.applications.NewsArticle);
+        mockedNewsPollerApplication = jasmine.util.mock(nh.applications.NewsPoller);
+
+        nhEventHandler = jasmine.util.mockObj(nh.eventHandler, {
             events: nh.eventHandler.events
         });
-        nh.applications.NewsArticle = jasmine.createSpy('nh.applications.NewsArticle').and.callFake(function () {
+        nhApplicationsNewsArticle = jasmine.createSpy('nh.applications.NewsArticle').and.callFake(function () {
             return mockedNewsArticleApplication;
         });
-        nh.applications.NewsPoller = jasmine.createSpy('nh.applications.NewsPoller').and.callFake(function () {
+        nhApplicationsNewsPoller = jasmine.createSpy('nh.applications.NewsPoller').and.callFake(function () {
             return mockedNewsPollerApplication;
         });
+
+        jasmine.util.strippedObject(nh, ['pages', 'utils.uniqueId']);
+
+        nh.eventHandler = nhEventHandler;
+        nh.applications = {
+            NewsArticle: nhApplicationsNewsArticle,
+            NewsPoller: nhApplicationsNewsPoller
+        };
     });
 
     afterEach(function () {
-        nh.eventHandler = backups.eventHandler;
-        nh.applications.NewsArticle = backups.newsArticleApplication;
-        nh.applications.NewsPoller = backups.newsPollerApplication;
+        jasmine.util.restoreOriginalObject(nh);
     });
 
     it('can be created and return an instance of nh.pages.PageController', function () {

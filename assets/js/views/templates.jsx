@@ -1,7 +1,7 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (templates) {
-    templates.PageLoader = React.createClass({
+    templates.PageLoader = nh.React.createClass({
         render: function () {
             return (
                 <div id="pageLoader">

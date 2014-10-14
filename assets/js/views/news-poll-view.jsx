@@ -1,7 +1,7 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (nh) {
-    nh.views.ArticleListing = React.createClass({
+    nh.views.ArticleListing = nh.React.createClass({
         getInitialState: function() {
             return {
                 isNew: nh.utils.typeCompare(this.props.isNew, nh.utils.types.BOOLEAN) ? this.props.isNew : true
@@ -38,7 +38,7 @@
         }
     });
 
-    nh.views.ArticlesListing = React.createClass({
+    nh.views.ArticlesListing = nh.React.createClass({
         getInitialState: function() {
             return {
                 limit: this.props.limit,
@@ -86,7 +86,7 @@
         }
     });
 
-    nh.views.Article = React.createClass({
+    nh.views.Article = nh.React.createClass({
         render: function () {
             return (
                 <article data-article-id={ this.props.id }>

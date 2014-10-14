@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 (function (utils) {
     var cid = 0;
@@ -22,7 +22,7 @@
 
     utils.addPageLoader = function () {
         if ($('body').find('#pageLoader').length === 0) {
-            React.renderComponent(nh.templates.PageLoader(null),
+            nh.React.renderComponent(nh.templates.PageLoader(null),
                 $('body').append('<div id="pageLoader" />').find('#pageLoader')[0]);
         }
     };

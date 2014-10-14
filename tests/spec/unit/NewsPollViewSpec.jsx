@@ -1,4 +1,4 @@
-/** @jsx React.DOM */
+/** @jsx nh.React.DOM */
 
 describe('A news article list view', function () {
     var $el, view;
@@ -16,7 +16,7 @@ describe('A news article list view', function () {
 
     it('will render a list item into a given component', function () {
         // Actions
-        view = React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
+        view = nh.React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
                 description='Some test description' isNew={ false } />, $el[0]);
 
         // Expectations
@@ -36,7 +36,7 @@ describe('A news article list view', function () {
         jasmine.clock().install();
 
         // Actions
-        view = React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
+        view = nh.React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
                 description='Some test description' isNew={ true } />, $el[0]);
 
         // Expectations
@@ -56,7 +56,7 @@ describe('A news article list view', function () {
         });
 
         // Actions
-        view = React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
+        view = nh.React.renderComponent(<nh.views.ArticleListing key={ 3 } id={ 3 } title='Some test title'
                 description='Some test description' isNew={ false } />, $el[0]);
         $el.find('li a')[0].click();
 
@@ -107,7 +107,7 @@ describe('A news article listing view', function () {
         articles = generateArticles(2);
 
         // Actions
-        view = React.renderComponent(<nh.views.ArticlesListing articles={ articles } limit={ 5 } />, $el[0]);
+        view = nh.React.renderComponent(<nh.views.ArticlesListing articles={ articles } limit={ 5 } />, $el[0]);
 
         // Expectations
         expect($el.html()).toEqualReactHTML(
@@ -127,7 +127,7 @@ describe('A news article listing view', function () {
         beforeEach(function () {
             jasmineReact.createStubComponent(nh.views, 'ArticleListing');
 
-            view = React.renderComponent(<nh.views.ArticlesListing articles={ generateArticles(3) } limit={ 5 } />,
+            view = nh.React.renderComponent(<nh.views.ArticlesListing articles={ generateArticles(3) } limit={ 5 } />,
                     $el[0]);
         });
 
@@ -199,7 +199,7 @@ describe('A news article view', function () {
 
     it('will render in given component', function () {
         // Actions
-        view = React.renderComponent(<nh.views.Article id={ 1 } title='Some test title'
+        view = nh.React.renderComponent(<nh.views.Article id={ 1 } title='Some test title'
                 description='<p>Some test description</p>' />, $el[0]);
 
         // Expectations

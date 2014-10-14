@@ -38828,10 +38828,10 @@
 
 nh.PROPS = {
     BASE_AJAX_URL: ''
-};;(function (context) {
+};;(function (context, window) {
     var exports;
 
-    exports = function (nh) {
+    exports = function (nh, window) {
         nh = nh || {};
 
         nh.config = {
@@ -38866,14 +38866,19 @@ nh.PROPS = {
         nh.pages = {};
 
         nh.templates = {};
+
+        if (window && window.React) {
+            nh.React = window.React;
+            delete window.React;
+        }
     };
 
     if (context.hasOwnProperty('exports')) {
         context.exports = exports;
     } else {
-        exports(context);
+        exports(context, window);
     }
-})(typeof module === 'undefined' ? nh : module);
+})(typeof module === 'undefined' ? nh : module, typeof module === 'undefined' ? window : null);
 ;(function (utils) {
     var cid = 0;
 
@@ -38896,7 +38901,7 @@ nh.PROPS = {
 
     utils.addPageLoader = function () {
         if ($('body').find('#pageLoader').length === 0) {
-            React.renderComponent(nh.templates.PageLoader(null),
+            nh.React.renderComponent(nh.templates.PageLoader(null),
                 $('body').append('<div id="pageLoader" />').find('#pageLoader')[0]);
         }
     };
@@ -39066,17 +39071,17 @@ nh.PROPS = {
 
     nh.SuperObject.extend = nh.utils.objExtend;
 })(nh);;(function (templates) {
-    templates.PageLoader = React.createClass({displayName: 'PageLoader',
+    templates.PageLoader = nh.React.createClass({
         render: function () {
             return (
-                React.DOM.div({id: "pageLoader"}, 
-                    React.DOM.h1(null, "Please wait...")
+                nh.React.DOM.div({id: "pageLoader"}, 
+                    nh.React.DOM.h1(null, "Please wait...")
                 )
             );
         }
     })
 })(nh.templates);;(function (nh) {
-    nh.views.ArticleListing = React.createClass({displayName: 'ArticleListing',
+    nh.views.ArticleListing = nh.React.createClass({
         getInitialState: function() {
             return {
                 isNew: nh.utils.typeCompare(this.props.isNew, nh.utils.types.BOOLEAN) ? this.props.isNew : true
@@ -39103,17 +39108,17 @@ nh.PROPS = {
 
         render: function () {
             return (
-                React.DOM.li({'data-article-id':  this.props.id, className:  this.state.isNew ? 'new' : ''}, 
-                    React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.selectArticle}, 
-                        React.DOM.h3(null,  this.props.title), 
-                        React.DOM.div({dangerouslySetInnerHTML: { __html: this.props.description}})
+                nh.React.DOM.li({'data-article-id':  this.props.id, className:  this.state.isNew ? 'new' : ''}, 
+                    nh.React.DOM.a({href:  '#link-for-' + this.props.id, onClick:  this.selectArticle}, 
+                        nh.React.DOM.h3(null,  this.props.title), 
+                        nh.React.DOM.div({dangerouslySetInnerHTML: { __html: this.props.description}})
                     )
                 )
             );
         }
     });
 
-    nh.views.ArticlesListing = React.createClass({displayName: 'ArticlesListing',
+    nh.views.ArticlesListing = nh.React.createClass({
         getInitialState: function() {
             return {
                 limit: this.props.limit,
@@ -39154,23 +39159,23 @@ nh.PROPS = {
 
         render: function () {
             return (
-                React.DOM.ul({className: "articleListing"}, 
+                nh.React.DOM.ul({className: "articleListing"}, 
                      this.buildArticleListings() 
                 )
             );
         }
     });
 
-    nh.views.Article = React.createClass({displayName: 'Article',
+    nh.views.Article = nh.React.createClass({
         render: function () {
             return (
-                React.DOM.article({'data-article-id':  this.props.id}, 
-                    React.DOM.header(null, 
-                        React.DOM.h1(null,  this.props.title)
+                nh.React.DOM.article({'data-article-id':  this.props.id}, 
+                    nh.React.DOM.header(null, 
+                        nh.React.DOM.h1(null,  this.props.title)
                     ), 
-                    React.DOM.div({className: "articleContent", dangerouslySetInnerHTML: { __html: this.props.description}}), 
-                    React.DOM.footer(null, 
-                        React.DOM.a({href: "#"}, "Share This")
+                    nh.React.DOM.div({className: "articleContent", dangerouslySetInnerHTML: { __html: this.props.description}}), 
+                    nh.React.DOM.footer(null, 
+                        nh.React.DOM.a({href: "#"}, "Share This")
                     )
                 )
             );
@@ -39197,7 +39202,7 @@ nh.PROPS = {
             });
 
             _this.$el = $('#articlesContainer');
-            _this.el = React.renderComponent(
+            _this.el = nh.React.renderComponent(
                 nh.views.ArticlesListing({articles:  _this.extractArticles(_this.$el), limit:  _this.ARTICLE_LIMIT}),
                 _this.$el[0]
             );
@@ -39263,7 +39268,7 @@ nh.PROPS = {
         },
 
         render: function (article) {
-            this.el = React.renderComponent(
+            this.el = nh.React.renderComponent(
                 nh.views.Article({id:  article.id, title:  article.title, description:  article.description}),
                 this.$el[0]
             );

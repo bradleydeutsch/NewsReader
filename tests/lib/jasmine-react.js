@@ -9,8 +9,8 @@ var jasmineReact = {
         }
 
         var comp = (typeof callback === "undefined") ?
-            React.renderComponent(component, container) :
-            React.renderComponent(component, container, callback);
+            nh.React.renderComponent(component, container) :
+            nh.React.renderComponent(component, container, callback);
 
         // keep track of the components we render, so we can unmount them later
         renderedComponents.push(comp);
@@ -43,7 +43,8 @@ var jasmineReact = {
         var componentConstructor = this.classComponentConstructor(klass);
 
         if(typeof componentConstructor === "undefined"){
-            throw("A component constructor could not be found for this class.  Are you sure you passed in a the component definition for a React component?")
+            throw("A component constructor could not be found for this class. "
+                + "Are you sure you passed in a the component definition for a React component?")
         }
 
         return componentConstructor.prototype;
@@ -53,9 +54,9 @@ var jasmineReact = {
         // keep track of the components we stub, so we can swap them back later
         componentStubs.push({obj: obj, propertyName: propertyName, originalValue: obj[propertyName]});
 
-        return obj[propertyName] = React.createClass({
+        return obj[propertyName] = nh.React.createClass({
             render: function(){
-                return React.DOM.div();
+                return nh.React.DOM.div();
             }
         });
     },
@@ -100,7 +101,7 @@ var jasmineReact = {
 
     unmountComponent: function(component){
         if(component.isMounted()){
-            return React.unmountComponentAtNode(component.getDOMNode().parentNode);
+            return nh.React.unmountComponentAtNode(component.getDOMNode().parentNode);
         } else {
             return false;
         }

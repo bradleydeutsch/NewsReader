@@ -1,4 +1,12 @@
 describe('Utils', function () {
+    beforeEach(function () {
+       jasmine.util.strippedObject(nh, ['utils']);
+    });
+
+    afterEach(function () {
+        jasmine.util.restoreOriginalObject(nh);
+    });
+
     it('can determine a variable is of a given type', function () {
         // Expectations
         expect(nh.utils.typeCompare([], '[object Array]')).toBe(true);
