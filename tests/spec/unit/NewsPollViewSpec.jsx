@@ -12,6 +12,16 @@ describe('A news article list view', function () {
         });
 
         $el = $('#viewDumper');
+
+        jasmine.util.strippedObject(nh, ['React', 'utils.types', 'views']);
+
+        nh.utils.typeCompare = function () {};
+
+        spyOn(nh.utils, 'typeCompare').and.returnValue(true);
+    });
+
+    afterEach(function () {
+        jasmine.util.restoreOriginalObject(nh);
     });
 
     it('will render a list item into a given component', function () {
@@ -78,6 +88,16 @@ describe('A news article listing view', function () {
         });
 
         $el = $('#viewDumper');
+
+        jasmine.util.strippedObject(nh, ['React', 'utils.types', 'views']);
+
+        nh.utils.typeCompare = function () {};
+
+        spyOn(nh.utils, 'typeCompare').and.returnValue(true);
+    });
+
+    afterEach(function () {
+        jasmine.util.restoreOriginalObject(nh);
     });
 
     generateArticles = function (num, startFrom) {

@@ -30,66 +30,66 @@
         return ret;
     };
 
-    /*Object.prototype.renameProperty = function (from, to) {
-        if (this.hasOwnProperty(from)) {
-            this[to] = this[from];
-            delete this[from];
-        }
-        return this;
-    };*/
-
-    function defunctKeysInObject(passedStr) {
-        utils.forEachKey(passedStr, function (key) {
-            var newKey = key + APPENDED_STRING;
-
-            this[newKey] = this[key];
-            delete this[key];
-
-            if (Object.prototype.toString.call(this[newKey]) === '[object Object]') {
-                defunctKeysInObject(this[newKey]);
-            }
-        });
+    function restrictRecursionDepth(key) {
+        return key === 'React';
     }
 
-    function revertDefunctKeysInObject(passedStr) {
-        utils.forEachKey(passedStr, function (key) {
-            var newKey = key.replace(APPENDED_STRING, '');
+    function renameKeysInObject(getKey, passedStr, depth, depthLimit) {
+        utils.forEachKey(passedStr, function (key, getKey, depth, depthLimit) {
+            var newKey = getKey(key);
+
+            depth = depth || 0;
 
             if (newKey !== key) {
                 this[newKey] = this[key];
                 delete this[key];
             }
 
-            if (Object.prototype.toString.call(this[newKey]) === '[object Object]') {
-                revertDefunctKeysInObject(this[newKey]);
+            if (restrictRecursionDepth((getKey === appendString) ? key : newKey)) {
+                depthLimit = 1;
             }
-        });
+
+            if ((Object.prototype.toString.call(this[newKey]) === '[object Object]')
+                    && ((typeof(depthLimit) == 'undefined') || (depth < depthLimit))) {
+                renameKeysInObject(getKey, this[newKey], depth + 1, depthLimit);
+            }
+        }, [getKey, depth, depthLimit]);
+    }
+
+    function appendString(key) {
+        return key + APPENDED_STRING;
+    }
+
+    function removeString(key) {
+        return key.replace(APPENDED_STRING, '');
     }
 
     utils.strippedObject = function (str, toKeepArr) {
-        var ret = {},
-            i, j, keyList, keyStart, keyStartRenamed, startLocalObj;
+        var i;
 
         if (typeof(str.hasBeenStripped) !== 'undefined') {
             throw new Error('Can\'t strip object as it has not yet been restored from its previous strip operation');
         }
 
-        defunctKeysInObject(str);
-
+        renameKeysInObject(appendString, str);
         str.hasBeenStripped = true;
 
-        function renameKeys(passedStr, key) {
+        function renameKeys(passedStr, key, depthLimit) {
             var keyList = key.split('.'),
                 topKey = keyList.shift(),
-                renamedKey = topKey + APPENDED_STRING;
+                renamedKey = appendString(topKey);
 
             passedStr[topKey] = passedStr[renamedKey];
             delete passedStr[renamedKey];
 
+            if (restrictRecursionDepth(topKey)) {
+                depthLimit = 1;
+            }
+
             if (keyList.length > 0) {
-                renameKeys(passedStr[topKey], keyList.join('.'));
+                renameKeys(passedStr[topKey], keyList.join('.'), depthLimit);
             } else if (Object.prototype.toString.call(passedStr[topKey]) === '[object Object]') {
-                revertDefunctKeysInObject(passedStr[topKey]);
+                renameKeysInObject(removeString, passedStr[topKey], 0, depthLimit);
             }
         }
 
@@ -99,17 +99,22 @@
     };
 
     utils.restoreOriginalObject = function (str) {
-        revertDefunctKeysInObject(str);
+        renameKeysInObject(removeString, str);
 
         delete str.hasBeenStripped;
     };
 
-    utils.forEachKey = function (obj, fnc) {
-        var key;
+    utils.forEachKey = function (obj, fnc, args) {
+        var key, arr;
+
+        args = args || [];
 
         for (key in obj) {
             if (obj.hasOwnProperty(key)) {
-                fnc.call(obj, key);
+                arr = args.slice(0);
+                arr.unshift(key);
+
+                fnc.apply(obj, arr);
             }
         }
     };
